@@ -12,16 +12,16 @@ Delete employee records by specifying their unique ID.
 
 # Technologies Used
 
-> Java
-> Swing (Graphical User Interface)
-> PostgreSQL (Database)
+1. Java
+2. Swing (Graphical User Interface)
+3. PostgreSQL (Database)
 
 # Getting Started
 
 Prerequisites:
-> Java Development Kit (JDK) installed
-> Apache Maven installed
-> PostgreSQL database server
+1. Java Development Kit (JDK) installed
+2. Apache Maven installed
+3. PostgreSQL database server
 
 # Installation
 
