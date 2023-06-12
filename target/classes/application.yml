@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+logging:
+  level:
+    root: info
+  file: logs/application.log
+
+myapp:
+  property1: value1
+  property2: value2
+
+# Database connection pool configuration
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ems
+    username: postgres
+    password: postgresql
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
