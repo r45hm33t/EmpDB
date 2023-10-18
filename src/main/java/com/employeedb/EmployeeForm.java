@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import java.io.*;
 
 import javax.swing.*;
 
@@ -13,6 +14,9 @@ public class EmployeeForm extends JFrame {
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/ems";
     private static final String DB_USERNAME = "postgres";
     private static final String DB_PASSWORD = "postgresql";
+
+    private JTextArea outputTextArea;
+    private PrintStream standardOut;
 
     private JTextField idField;
     private JTextField nameField;
@@ -86,6 +90,23 @@ public class EmployeeForm extends JFrame {
         updateButton = new JButton("Update");
         deleteButton = new JButton("Delete");
 
+        // Create the JTextArea for displaying the output
+        outputTextArea = new JTextArea();
+        outputTextArea.setEditable(false);
+        
+        // Create a PrintStream to redirect the standard output to the JTextArea
+        PrintStream printStream = new PrintStream(new CustomOutputStream(outputTextArea));
+        
+        // Redirect the standard output to the PrintStream
+        standardOut = System.out;
+        System.setOut(printStream);
+        
+        // ...
+        
+        // Add the JTextArea to the GUI layout
+        JScrollPane textScrollPane = new JScrollPane(outputTextArea);
+        add(textScrollPane, BorderLayout.CENTER);
+
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -126,6 +147,28 @@ public class EmployeeForm extends JFrame {
         pack();
         setVisible(true);
     }
+
+    private class CustomOutputStream extends OutputStream {
+        private JTextArea textArea;
+        
+        public CustomOutputStream(JTextArea textArea) {
+            this.textArea = textArea;
+        }
+        
+        @Override
+        public void write(int b) throws IOException {
+            // Redirect the output to the JTextArea
+            textArea.append(String.valueOf((char) b));
+            
+            // Scroll to the end of the text area
+            textArea.setCaretPosition(textArea.getDocument().getLength());
+            
+            // Write the output to the standard output as well
+            standardOut.write(b);
+        }
+    }
+    
+
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
